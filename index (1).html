@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Family Christmas List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Caveat:wght@500;700&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#f6f0e4; --paper:#fffaf1; --ink:#1d3328; --muted:#5f6b5f; --line:#e3d8c4;
+  --pine:#1f4a37; --berry:#a8262f; --berry-soft:#f6e1dd; --gold:#b98a2f;
+  --done:#8d978c; --tray:#1f4a37; --tray-ink:#fffaf1; --shadow:0 1px 0 rgba(60,40,10,.06),0 8px 24px -14px rgba(60,40,10,.25);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#101a15; --paper:#17241d; --ink:#efe6d4; --muted:#a3ad9f; --line:#2b3b32;
+  --pine:#8fc4a5; --berry:#e2686f; --berry-soft:#3a1f22; --gold:#ddb465;
+  --done:#6e7b71; --tray:#efe6d4; --tray-ink:#14201a; --shadow:0 8px 24px -14px rgba(0,0,0,.6); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101a15; --paper:#17241d; --ink:#efe6d4; --muted:#a3ad9f; --line:#2b3b32;
+  --pine:#8fc4a5; --berry:#e2686f; --berry-soft:#3a1f22; --gold:#ddb465;
+  --done:#6e7b71; --tray:#efe6d4; --tray-ink:#14201a; --shadow:0 8px 24px -14px rgba(0,0,0,.6); color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 "Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 120px}
+.wrap{max-width:720px;margin:0 auto}
+a{color:inherit}
+button{font:inherit;color:inherit}
+
+/* ribbon */
+.ribbon{height:10px;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));
+  background:repeating-linear-gradient(135deg,var(--berry) 0 12px,var(--paper) 12px 24px,var(--pine) 24px 36px,var(--paper) 36px 48px)}
+
+header{padding-block:40px 18px;text-align:center}
+.kicker{font-family:Caveat,cursive;font-size:1.6rem;color:var(--berry);line-height:1}
+h1{font-family:"Young Serif",Georgia,serif;font-weight:400;font-size:clamp(2.1rem,7vw,3.2rem);line-height:1.05;margin:.2em 0 .25em;text-wrap:balance}
+.lede{max-width:34em;margin:0 auto;color:var(--muted);text-wrap:pretty}
+.stars{color:var(--gold);letter-spacing:.5em;font-size:.8rem;margin-top:14px}
+
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0 8px}
+.how div{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.88rem;color:var(--muted)}
+.how b{display:block;font-family:"Young Serif",Georgia,serif;font-weight:400;color:var(--ink);font-size:1rem;margin-bottom:2px}
+@media (max-width:560px){.how{grid-template-columns:1fr}}
+
+.status{font-size:.85rem;color:var(--muted);text-align:center;min-height:1.5em;margin:6px 0}
+.status.warn{color:var(--berry)}
+
+nav.people{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;
+  display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line);margin-bottom:8px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+nav.people::-webkit-scrollbar{display:none}
+nav.people a{flex:none;text-decoration:none;font-size:.88rem;font-weight:500;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper);white-space:nowrap}
+nav.people a:hover{border-color:var(--pine)}
+.toolbar{display:flex;justify-content:flex-end;margin:4px 0 0}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:.88rem;color:var(--muted);cursor:pointer;user-select:none}
+.toggle input{accent-color:var(--pine);width:16px;height:16px}
+
+section.person{margin-top:34px;scroll-margin-top:70px}
+.ph{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:6px;margin-bottom:4px}
+.ph h2{font-family:"Young Serif",Georgia,serif;font-weight:400;font-size:1.9rem;margin:0;line-height:1.1}
+.ph .size{font-family:Caveat,cursive;font-size:1.25rem;color:var(--berry)}
+.ph .count{margin-left:auto;font-size:.8rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.intro{font-size:.9rem;color:var(--muted);margin:8px 0 2px}
+
+ul.items{list-style:none;margin:0;padding:0}
+.item{display:grid;grid-template-columns:34px 1fr auto;gap:4px 12px;align-items:start;padding:14px 4px;border-bottom:1px dashed var(--line)}
+.pick{width:26px;height:26px;margin-top:1px;border-radius:50%;border:2px solid var(--pine);background:transparent;cursor:pointer;display:grid;place-items:center;padding:0}
+.pick svg{width:14px;height:14px;opacity:0}
+.item.picked .pick{background:var(--pine)}
+.item.picked .pick svg{opacity:1;stroke:var(--paper)}
+.body{min-width:0}
+.name{font-weight:600;line-height:1.3}
+.for{display:inline-block;font-family:Caveat,cursive;font-size:1.1rem;color:var(--berry);margin-right:6px;line-height:1}
+.note{font-size:.88rem;color:var(--muted);margin-top:2px;text-wrap:pretty}
+.link{display:inline-block;margin-top:4px;font-size:.84rem;font-weight:500;color:var(--pine);text-decoration:none;border-bottom:1px solid currentColor}
+.price{font-size:.9rem;font-weight:500;text-align:right;white-space:nowrap;max-width:9.5em;white-space:normal;line-height:1.3}
+.item.picked{background:linear-gradient(90deg,var(--berry-soft),transparent 70%)}
+.item.bought .name{text-decoration:line-through;text-decoration-color:var(--berry);text-decoration-thickness:2px;color:var(--done)}
+.item.bought .note,.item.bought .price,.item.bought .link{color:var(--done)}
+.item.bought .pick,.item.covered .pick{display:none}
+.tag{display:none;font-family:Caveat,cursive;font-weight:700;color:var(--berry);font-size:1.05rem;transform:rotate(-8deg);line-height:1;margin-top:3px}
+.item.bought .tag{display:block}
+.item.covered{opacity:.55}
+.item.covered .tag{display:block;color:var(--done)}
+.undo{background:none;border:0;padding:0;margin-left:10px;font-size:.8rem;color:var(--muted);text-decoration:underline;cursor:pointer}
+.undo.confirm{color:var(--berry);font-weight:600}
+body.hide-bought .item.bought,body.hide-bought .item.covered{display:none}
+
+.group{margin:12px 0 4px;border:1.5px solid var(--gold);border-radius:14px;padding:4px 12px 0;background:var(--paper)}
+.group-h{display:flex;gap:10px;align-items:baseline;padding:8px 0 2px;flex-wrap:wrap}
+.group-h strong{font-family:"Young Serif",Georgia,serif;font-weight:400;font-size:1.05rem}
+.group-h span{font-family:Caveat,cursive;font-size:1.15rem;color:var(--gold)}
+.group .item:last-child{border-bottom:0}
+
+footer{margin-top:40px;text-align:center;font-size:.82rem;color:var(--muted)}
+
+/* tray */
+.tray{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--tray);color:var(--tray-ink);
+  padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  box-shadow:0 -10px 30px -12px rgba(0,0,0,.35)}
+.tray .in{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tray .sum{flex:1;min-width:0}
+.tray .sum b{font-family:"Young Serif",Georgia,serif;font-weight:400;font-size:1.1rem}
+.tray .sum small{display:block;opacity:.75;font-size:.8rem}
+.btn{border:0;border-radius:999px;padding:11px 18px;font-weight:600;cursor:pointer}
+.btn.primary{background:var(--berry);color:#fff}
+.btn.ghost{background:transparent;border:1.5px solid currentColor}
+.btn:disabled{opacity:.5;cursor:default}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(10,20,15,.45);z-index:30}
+.sheet{position:fixed;left:50%;transform:translateX(-50%);bottom:0;z-index:31;width:min(640px,100%);max-height:88vh;overflow:auto;
+  background:var(--paper);color:var(--ink);border-radius:20px 20px 0 0;box-shadow:var(--shadow);
+  padding:22px max(18px,env(safe-area-inset-right,0px)) calc(22px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px))}
+.sheet h3{font-family:"Young Serif",Georgia,serif;font-weight:400;font-size:1.5rem;margin:0 0 4px}
+.sheet p{margin:0 0 12px;color:var(--muted);font-size:.92rem}
+.sheet ol{margin:0 0 16px;padding-left:1.3em}
+.sheet li{padding:6px 0;border-bottom:1px dashed var(--line)}
+.sheet li small{color:var(--muted)}
+.sheet .rm{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:.8rem;cursor:pointer;margin-left:6px}
+.sheet .row{display:flex;gap:10px;flex-wrap:wrap}
+.sheet .row .btn{flex:1 1 160px}
+.btn.line{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+textarea.copy{width:100%;min-height:150px;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);color:var(--ink);font:13px/1.45 ui-monospace,Menlo,monospace;margin:4px 0 12px;resize:vertical}
+.done-mark{font-family:Caveat,cursive;font-size:1.5rem;color:var(--berry)}
+.msg{font-size:.85rem;color:var(--pine);min-height:1.3em;margin-top:8px}
+.msg.err{color:var(--berry)}
+body{margin:0}
+[hidden]{display:none!important}
+:root{padding-top:env(safe-area-inset-top,0px)}
+</style>
+</head>
+<body>
+
+<div class="ribbon" aria-hidden="true"></div>
+<div class="wrap">
+  <header>
+    <div class="kicker">Dear Grandma &amp; Grandpa,</div>
+    <h1>Our Christmas List</h1>
+    <p class="lede">Everything the kids (and grown-ups) are wishing for this year, with sizes, links and prices. Anything crossed off is already taken care of.</p>
+    <div class="stars" aria-hidden="true">✦ ✦ ✦</div>
+    <div class="how">
+      <div><b>1. Tap the circles</b>next to anything you'd like to give.</div>
+      <div><b>2. Tap “I'm getting these”</b>and they're crossed off for everyone.</div>
+      <div><b>3. Keep your list</b>with links and prices: copy it, save it or email it to yourself.</div>
+    </div>
+    <div class="status" id="status">Loading what's already been bought…</div>
+  </header>
+
+  <nav class="people" id="nav" aria-label="Jump to"></nav>
+  <div class="toolbar"><label class="toggle"><input type="checkbox" id="hideBought"> Hide crossed-off items</label></div>
+  <main id="list"></main>
+  <footer>Prices checked November 7, 2026 and may change. Similar items are always fine.</footer>
+</div>
+
+<div class="tray" id="tray" hidden>
+  <div class="in">
+    <div class="sum"><b id="trayCount">0 picks</b><small id="trayTotal"></small></div>
+    <button class="btn ghost" id="clearPicks">Clear</button>
+    <button class="btn primary" id="review">I'm getting these</button>
+  </div>
+</div>
+<div class="scrim" id="scrim" hidden></div>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle"></div>
+
+<script>
+const SIZES={lucy:"Kids 10 · Shoes big kids 2",jonah:"Youth L · Cleats 6 · Football gloves youth M",eliza:"4T · Shoes little kids 9.5",grant:"Socks L"};
+const T=s=>"https://www.target.com/s?searchTerm="+s;
+// [id, name, note, price, url, extra]
+const PEOPLE=[
+ {id:"lucy",name:"Lucy",size:SIZES.lucy,items:[
+  ["l-ag","American Girl Truly Me doll","Her top wish. Josefina is a backup.","$115–135","https://www.americangirl.com/products/truly-me-18-inch-doll-121-hjp74"],
+  ["l-owala","Owala 30 oz FreeSip tumbler","Periwinkle blue, with bucket handle","$34.99","https://www.target.com/p/-/A-93462665"],
+  ["l-derpy","LEGO Derpy Tiger & Sussie Bird (72537)","KPop Demon Hunters set, ages 9+","$69.99","https://www.lego.com/en-us/product/derpy-tiger-and-sussie-bird-72537"],
+  ["l-lilies","LEGO Botanicals Water Lilies (11511)","Ages 9+","about $30","https://www.lego.com/en-us/product/water-lilies-11511"],
+  ["l-egg","CrunchLabs Egg Drop Challenge","Mark Rober build kit","$14.99","https://www.target.com/p/crunchlabs-by-mark-rober-egg-drop-challenge/-/A-95116575"],
+  ["l-slime","CrunchLabs Slime Prank Lab","Mark Rober build kit","$14.99","https://www.target.com/p/crunchlabs-by-mark-rober-slime-prank-lab/-/A-95116573"],
+  ["l-planes","CrunchLabs Turbo Trick Planes","Mark Rober build kit","$14.99",T("crunchlabs+turbo+trick+planes")],
+  ["l-spa","My Look Light-Up Super Spa Salon","Kids' foot spa","$29.99","https://www.target.com/p/my-look-6-in-1-light-up-super-spa-salon-activity-kit/-/A-82174258"],
+  ["l-snap","My Look Insta Snap Camera","Prints photos instantly","$34.99","https://www.target.com/p/my-look-insta-snap-camera/-/A-93985258"],
+  ["l-charm","Cool Maker Charm'd Accessory Studio","","$19.99","https://www.target.com/p/cool-maker-charm-39-d-accessory-studio/-/A-94984091"],
+  ["l-airbrush","Crayola KPop Demon Hunters Marker Airbrush","17 pieces with stencils and stickers","$29.99","https://www.target.com/p/crayola-kpop-demon-hunters-marker-air-brush-activity-kit/-/A-95257848"],
+  ["l-guess","Guess Who? People & Pets","Board game","about $16–20","https://a.co/d/0fhTuyRX"],
+  ["l-sew","Mini sewing machine for kids","JUCVNB, 12 stitches, foot pedal, sewing kit included","check link","https://a.co/d/0akgwp8s"],
+  ["l-bsc","Baby-Sitters Club: Jessi's Secret Language","Graphic novel #12, paperback","$12.11","https://bookshop.org/p/books/jessi-s-secret-language-a-graphic-novel-the-baby-sitters-club-12-ann-m-martin/c350f9c91e3e3126"],
+  ["l-gems","National Geographic Gemstone Dig Kit","Dig up 10 real gems","about $12–16","https://www.amazon.com/National-Geographic-Gemstones-Excavation-Collection/dp/B0CB2835ZQ"],
+  ["l-geodes","National Geographic Break Open 10 Geodes","Goggles and display stands included","about $30–32","https://a.co/d/00YxIXNl"],
+  ["l-necklace","“Lucy” cursive name necklace","Kid-size chain","varies","https://www.etsy.com/search?q=kids+cursive+name+necklace"],
+  ["l-robux","Robux","Roblox gift card, any amount","$10 and up","https://www.roblox.com/giftcards"],
+  ["l-decor","Room decor","Pink and light blue","your choice",""],
+  ["l-clothes","Cute clothes","Kids size 10","your choice",""],
+  ["l-puzzle","Jigsaw puzzle","300–500 pieces; the family loves doing puzzles together","varies",T("300+piece+puzzle+kids")],
+  ["l-disco","Disco Decision Ball","Mirror-ball answer ball, 20 answers","check link","https://www.playtoysandbooks.com/product/disco-decision-ball/12849"],
+  ["l-kidss","Donation to K.I.D.S.S. for Kids in Lucy's name","Supports Family Services at Lurie Children's Hospital","any amount","https://www.kidss4kids.org/items"]
+ ]},
+ {id:"jonah",name:"Jonah",size:SIZES.jonah,items:[
+  ["j-gibbs","Jahmyr Gibbs Lions jersey","Youth L","about $90","https://nike.com/t/jahmyr-gibbs-detroit-lions-big-kids-odImpnHI/B7Z1P9LIOGJ-LIO"],
+  ["j-bears","Chicago Bears jersey","Youth L","about $110","https://www.dickssportinggoods.com/search/SearchDisplay?searchTerm=youth+bears+jersey"],
+  ["j-ronaldo","Portugal Ronaldo #7 2026 Away jersey","PUMA, youth L","$110","https://www.dickssportinggoods.com/p/puma-youth-portugal-cristiano-ronaldo-7-2026-away-replica-jersey-26pumyfangffpf26ywwtg/26pumyfangffpf26ywwtg"],
+  ["j-frame","Jersey display frame","KCRasan lockable shadow box","check link","https://a.co/d/02sawva4"],
+  {group:"cleats",title:"Soccer cleats, size 6",items:[
+   ["j-cleat1","Nike Phantom 6 High Academy FG","White/Turquoise","about $75–80","https://www.dickssportinggoods.com/p/nike-kids-phantom-6-high-academy-fg-soccer-cleats-26nikysocczg4bg2s38ii/26nikysocczg4bg2s38ii?color=White%2FTurquoise"],
+   ["j-cleat2","Nike Phantom 6 Club Erling Haaland MG","Blue","about $55","https://www.dickssportinggoods.com/p/nike-kids-phantom-6-club-erling-haaland-mg-soccer-cleats-26nikysocc3uwtiucfn2q/26nikysocc3uwtiucfn2q?color=Blue"],
+   ["j-cleat3","Nike United Phantom 6 High Academy FG","Multi/Black","about $75–80","https://www.dickssportinggoods.com/p/nike-kids-united-phantom-6-high-academy-fg-soccer-cleats-26nikysocc1gjpoofafoc/26nikysocc1gjpoofafoc?color=Multi%2FBlack"]]},
+  ["j-ball","Nike Phantom training soccer ball","White/Ember Glow","$22","https://www.dickssportinggoods.com/p/nike-phantom-training-soccer-ball-24nikuphntmsz3s24scb/24nikuphntmsz3s24scb?color=White%2FEmber%20Glow"],
+  ["j-gk","Nike Match Jr. goalkeeper gloves","Big kids, any color","$27","https://nike.com/t/match-jr-big-kids-goalkeeper-soccer-gloves-VZjLxM/HQ0258-494"],
+  {group:"fbgloves",title:"Football gloves, youth M, white",items:[
+   ["j-fg1","Grip Boost Stealth 6.0 DeSean Jackson","Youth M, White","$50","https://www.dickssportinggoods.com/p/grip-boost-stealth-6-0-boost-desean-jackson-football-gloves-youth-25griyfootgbdsnjcknqy/25griyfootgbdsnjcknqy?color=White"],
+   ["j-fg2","Battle Sports Doom Speed “Graffiti”","Youth M, White","about $45","https://www.dickssportinggoods.com/p/battle-sports-doom-speed-receiver-football-gloves-graffiti-25batyfootythdmspdafd/25batyfootythdmspdafd?color=White"]]},
+  ["j-ankle","Shot Power ankle weights","For shot power training","check link","https://shop.com/products/8649333669932/shot-power-ankle-weights?variantId=46571043979308"],
+  ["j-isurvived","I Survived books","By Lauren Tarshis. 10-book box set about $28–50","$5–8 each","https://bookshop.org/search?keywords=i+survived+lauren+tarshis"],
+  ["j-operation","Operation","Board game","$19.99",T("operation+game")],
+  ["j-vbucks","V-Bucks","Fortnite gift card, any amount","$10 and up","https://www.amazon.com/v-bucks-card/s?k=v+bucks+card"],
+  ["j-robux","Robux","Roblox gift card, any amount","$10 and up","https://www.roblox.com/giftcards"],
+  ["j-ysi","Donation to The YSI Foundation in Jonah's name","Funds free soccer camps for Chicago kids","any amount","https://www.paypal.com/donate/?hosted_button_id=4RGUF9M37GS2G"],
+  ["j-pc","PC","Gaming computer","varies",""],
+  ["j-puzzle","Jigsaw puzzle","About 500 pieces; sports themes would be fun","varies",T("500+piece+puzzle")]
+ ]},
+ {id:"eliza",name:"Eliza",size:SIZES.eliza,items:[
+  ["e-record","Fisher-Price Rockin' Record Player","Ages 3+, plays 20 songs","$25.99–43.99","https://www.target.com/p/-/A-89960159"],
+  ["e-barbie","Barbie Limitless Adventure “Brooklyn” travel doll","Comes with suitcases and accessories","$19.99",T("barbie+limitless+adventure+brooklyn")],
+  ["e-tennis","Wilson youth tennis racquet + red starter balls","Light blue; a 19\" racquet fits her now","$19.99 + $3.99",T("wilson+us+open+junior+tennis+racquet")],
+  ["e-bluey","Bluey Splash Time game","Bath-time game, needs 3 AA batteries","check link",T("bluey+splash+time+game")],
+  ["e-magna","Magna-Tiles","Classic 32-piece set","about $50",T("magna-tiles")],
+  ["e-playdoh","Play-Doh Super Sizzlin' Kitchen","","$44.99","https://www.target.com/p/play-doh-sizzling-kitchen/-/A-94989868"],
+  ["e-memory","eeBoo I Never Forget a Face memory game","Classic memory game with illustrated faces of kids from around the world, ages 3+. Any good matching set is fine.","$24.99","https://eeboo.com/search?q=i+never+forget+a+face"],
+  ["e-gofish","Go Fish card deck by Oliver Jeffers","Picture-book illustrations; also plays Concentration and Snap. Ages 4+","$12.99","https://readbrightly.com/books/9781984826749/go-fish-a-3-in-1-card-deck-by-oliver-jeffers"],
+  ["e-dressup","Dress-up set","Size 4T","varies",T("kids+dress+up+set")],
+  ["e-books","Picture books","","varies",""],
+  ["e-puzzle","Floor puzzle","24–48 pieces","varies",T("48+piece+floor+puzzle")]
+ ]},
+ {id:"girls",name:"Lucy & Eliza",intro:"Things the girls would share. Similar Kinetic Sand sets are fine too.",items:[
+  ["g-sand","Kinetic Sand Sandyland Folding Sandbox","Only at Target","$34.99",T("kinetic+sand+sandyland+sandbox")],
+  ["g-vinyl","Mini Brands Mystery Vinyl capsule","Plays music","about $12 each","https://www.target.com/p/mini-brands-vinyls-capsule-s1-mini-figure/-/A-1012178109"],
+  ["g-lps","Littlest Pet Shop Deluxe Surprise Reveal – Divas","","check link",T("littlest+pet+shop+deluxe+surprise+reveal")],
+  ["g-camera","Kids instant print camera","Any brand; this one prints black-and-white instantly","check link","https://a.co/d/08uYPh33"]
+ ]},
+ {id:"experiences",name:"Experiences",intro:"Wonderful grandparent gifts: wrap a card or tickets, then plan the day together.",items:[
+  ["x-crochet","Crochet classes at Sister-Arts Studio","Gift certificate, Lincoln Park","from $25","https://sisterartsstudio.com/gift-certificate",{for:"Lucy"}],
+  ["x-ag","American Girl store day","Café, doll salon, or picking out her Truly Me","","",{for:"Lucy"}],
+  ["x-highlights","Professional highlights at a salon","","","",{for:"Lucy"}],
+  ["x-squish","Mall day to shop for squishies","","","",{for:"Lucy"}],
+  ["x-girlsday","Girls' day out with family","","","",{for:"Lucy & Eliza"}],
+  ["x-nails","Nail salon day with family","","","",{for:"Lucy & Eliza"}],
+  ["x-game","Tickets to a pro game","Bulls, Bears, Lions or Fire","","",{for:"Jonah"}],
+  ["x-yes","A Yes Day","","","",{for:"All three"}],
+  ["x-la","Something for our LA spring break trip","","","",{for:"Whole family"}]
+ ]},
+ {id:"stockings",name:"Stocking stuffers",intro:"For Jonah, Lucy & Eliza. Most are under $6 at Target.",items:[
+  ["s-dumpling","Mystery Squish Dumpling","","about $5 each",T("mystery+squish+dumpling")],
+  ["s-cloud","NeeDoh Cloud Pleaser","","about $6 each",T("needoh+cloud+pleaser")],
+  ["s-cone","NeeDoh Nice Cream Cone","","about $6 each",T("needoh+nice+cream+cone")],
+  ["s-cube","NeeDoh Nice Cube Confetti Colorburst","","about $6 each",T("needoh+nice+cube")],
+  ["s-squeeezy","Squeeezy squishies","Dachshund, Highland cow, jumbo duck, peach","about $6 each",T("squeeezy")],
+  ["s-miniverse","Miniverse Hello Kitty capsule","For Lucy & Eliza","about $13 each",T("miniverse+hello+kitty")]
+ ]},
+ {id:"grant",name:"Grant",size:SIZES.grant,items:[
+  ["gr-socks","Bombas Vintage Stripes Half Calf 4-pack","Men's size L","$55.80","https://bombas.com/products/mens-vintage-stripes-half-calf-socks-4-pack"],
+  ["gr-max","Family outing to Max's Hideaway","Everyone goes with him","",""],
+  ["gr-lodge","Donation to The Lincoln Lodge in Grant's name","Nonprofit comedy venue in Chicago","any amount","https://www.thelincolnlodge.com/donate"],
+  ["gr-liftyboi","Donation to Project Lifty Boi in Grant's name","Donate through BetterWorld","any amount","https://projectliftyboi.betterworld.org/"]
+ ]},
+ {id:"valerie",name:"Valerie",items:[
+  ["v-afform","Afform The Small Traveller makeup bag","Bisque","$85","https://afform.com/products/the-small-bisque-traveller-makeup-bag"],
+  ["v-aesop","Aesop gift card","","any amount","https://www.aesop.com/us/"],
+  ["v-everlane","Everlane gift card","","any amount","https://www.everlane.com/"],
+  ["v-towel","Wrap x Kangan Arora tea towel","Squares Red & Lilac, just one","$27","https://www.woonwinkelhome.com/products/tea-towel-squares"],
+  ["v-plants","Interesting house plants","Something unusual for the house","your choice",""],
+  ["v-newmoms","Donation to New Moms in Valerie's name","Chicago nonprofit supporting young moms","any amount","https://newmoms.org/donate"]
+ ]},
+ {id:"house",name:"For the house",intro:"For Valerie & Grant.",items:[
+  ["h-mugs","Acme Bobby Medium Mugs, Clay","2–4 mugs; singles sold too, ships from Canada","6-pack $88.80","https://www.acmecupsusa.com/collections/all/products/acme-bobby-mug-medium-300ml-10-14oz"],
+  {group:"knives",title:"Knife set",items:[
+   ["h-global","Global 40th Anniversary 3-piece","","$169.95","https://cutleryandmore.com/collections/global-knife-sets?page=1"],
+   ["h-mac","Mac Chef Series 3-piece","Paring, utility and chef's knife","$149.95","https://cutleryandmore.com/collections/mac-sale/products/mac-chef-series-knife-set-39605"],
+   ["h-victorinox","Victorinox Fibrox 3-piece","Budget pick","about $126","https://www.knifecountryusa.com/store/product/352954.352957/victorinox-510533x3-chef-s-set-3-piece.html"]]},
+  ["h-board","Large walnut cutting board","Like the John Boos 17×12 Rustic Edge; similar is fine","$159.95","https://www.crateandbarrel.com/john-boos-17x12-rustic-edge-walnut-cutting-board/s673368"],
+  ["h-hd","Home Depot gift card","","any amount","https://www.homedepot.com"],
+  ["h-militos","Milito's gift certificate","1108 W. Fullerton; car wash, detailing or repair, good 18 months","from $25","https://militosautorepair.com/product/gift-certificate/"]
+ ]}
+];
+
+// flatten
+const ITEMS={}; const GROUPS={};
+for(const p of PEOPLE){for(const it of p.items){
+  if(Array.isArray(it)){const [id,name,note,price,url,ex]=it;ITEMS[id]={id,name,note,price,url,for:ex&&ex.for,person:p.name}}
+  else{GROUPS[it.group]=it.items.map(a=>a[0]);for(const [id,name,note,price,url] of it.items)ITEMS[id]={id,name,note,price,url,person:p.name,group:it.group,groupTitle:it.title}}
+}}
+
+let bought={};           // id -> true (shared)
+let picks=new Set();     // this viewer
+let canWrite=null;       // null unknown, false read-only
+// Paste your Google Apps Script web app URL here (see README):
+const ENDPOINT="PASTE_YOUR_WEB_APP_URL_HERE";
+const API=/^https:\/\/script\.google\.com\//.test(ENDPOINT)?ENDPOINT:null;
+async function api(body){
+  const r=body?await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)}):await fetch(API+"?t="+Date.now());
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  const j=await r.json();if(!j||!Array.isArray(j.bought))throw new Error("bad response");
+  const next={};j.bought.forEach(id=>{if(ITEMS[id])next[id]=true});bought=next;return j;
+}
+try{const s=JSON.parse(localStorage.getItem("xmas-picks")||"[]");s.forEach(id=>ITEMS[id]&&picks.add(id))}catch(e){}
+try{if(localStorage.getItem("xmas-hide")==="1"){document.getElementById("hideBought").checked=true;document.body.classList.add("hide-bought")}}catch(e){}
+function savePicks(){try{localStorage.setItem("xmas-picks",JSON.stringify([...picks]))}catch(e){}}
+
+const $=s=>document.querySelector(s);
+const el=(t,c,txt)=>{const e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e};
+const CHECK='<svg viewBox="0 0 16 16" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg>';
+
+function isCovered(id){const g=ITEMS[id].group;return !!g&&!bought[id]&&GROUPS[g].some(o=>bought[o])}
+const STORES={"dickssportinggoods.com":"Dick's","target.com":"Target","amazon.com":"Amazon","a.co":"Amazon","nike.com":"Nike","lego.com":"LEGO","bookshop.org":"Bookshop","etsy.com":"Etsy","americangirl.com":"American Girl","crateandbarrel.com":"Crate & Barrel","cutleryandmore.com":"Cutlery and More","apple.com":"Apple","homedepot.com":"Home Depot","paypal.com":"PayPal","projectliftyboi.betterworld.org":"BetterWorld"};
+function host(u){try{const h=new URL(u).hostname.replace(/^www\./,"");return STORES[h]||h}catch(e){return "link"}}
+
+function itemRow(id){
+  const it=ITEMS[id];const li=el("li","item");li.dataset.id=id;
+  const b=el("button","pick");b.innerHTML=CHECK;b.setAttribute("aria-label","Pick "+it.name);b.onclick=()=>togglePick(id);
+  const tag=el("div","tag");
+  const body=el("div","body");const nm=el("div","name");
+  if(it.for)nm.append(el("span","for",it.for));
+  nm.append(document.createTextNode(it.name));body.append(nm);
+  if(it.note)body.append(el("div","note",it.note));
+  if(it.url){const a=el("a","link",(/donate|gift-?card|certificate|items$/i.test(it.url)||/^Donation/.test(it.name)?"Go to ":"See it at ")+host(it.url)+" ↗");a.href=it.url;a.target="_blank";a.rel="noopener";body.append(a)}
+  const undo=el("button","undo","Undo");undo.hidden=true;undo.onclick=()=>unbuy(id,undo);
+  body.append(undo);
+  const lead=el("div","lead");lead.append(b,tag);
+  li.append(lead,body,el("div","price",it.price||""));
+  return li;
+}
+function render(){
+  const nav=$("#nav"),list=$("#list");nav.innerHTML="";list.innerHTML="";
+  for(const p of PEOPLE){
+    const a=el("a",null,p.name);a.href="#"+p.id;a.onclick=e=>{e.preventDefault();document.getElementById(p.id).scrollIntoView({behavior:"smooth"})};nav.append(a);
+    const sec=el("section","person");sec.id=p.id;
+    const h=el("div","ph");h.append(el("h2",null,p.name));if(p.size)h.append(el("span","size",p.size));
+    const cnt=el("span","count");cnt.dataset.person=p.id;h.append(cnt);sec.append(h);
+    if(p.intro)sec.append(el("p","intro",p.intro));
+    const ul=el("ul","items");
+    for(const it of p.items){
+      if(Array.isArray(it))ul.append(itemRow(it[0]));
+      else{const g=el("li","group");const gh=el("div","group-h");gh.append(el("strong",null,it.title),el("span",null,"pick just one"));
+        const gu=el("ul","items");it.items.forEach(a=>gu.append(itemRow(a[0])));g.append(gh,gu);ul.append(g)}
+    }
+    sec.append(ul);list.append(sec);
+  }
+  paint();
+}
+function paint(){
+  document.querySelectorAll(".item").forEach(li=>{
+    const id=li.dataset.id,b=!!bought[id],cov=isCovered(id);
+    if(b||cov)picks.delete(id);
+    li.classList.toggle("bought",b);li.classList.toggle("covered",cov);li.classList.toggle("picked",picks.has(id));
+    li.querySelector(".tag").textContent=b?"Bought!":cov?"Covered":"";
+    li.querySelector(".undo").hidden=!b||canWrite===false;
+    li.querySelector(".pick").setAttribute("aria-pressed",picks.has(id));
+  });
+  for(const p of PEOPLE){
+    const ids=p.items.flatMap(it=>Array.isArray(it)?[it[0]]:[it.items[0][0]]); // a group counts once
+    const done=p.items.filter(it=>Array.isArray(it)?bought[it[0]]:it.items.some(a=>bought[a[0]])).length;
+    const c=document.querySelector('.count[data-person="'+p.id+'"]');if(c)c.textContent=done?done+" of "+ids.length+" covered":ids.length+" wishes";
+  }
+  savePicks();paintTray();
+}
+function num(price){const m=(price||"").replace(/,/g,"").match(/\$(\d+(?:\.\d+)?)/);return m?parseFloat(m[1]):null}
+function totals(ids){let t=0,unk=0;ids.forEach(id=>{const n=num(ITEMS[id].price);if(n==null||/any|varies|choice|check/i.test(ITEMS[id].price))unk++;if(n!=null)t+=n});return {t,unk}}
+function money(n){return "$"+n.toLocaleString("en-US",{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2})}
+function paintTray(){
+  const n=picks.size;$("#tray").hidden=n===0;
+  $("#trayCount").textContent=n+(n===1?" pick":" picks");
+  const {t,unk}=totals([...picks]);
+  $("#trayTotal").textContent=t?"About "+money(t)+(unk?" plus "+unk+" with flexible prices":""):(unk?"Prices are flexible":"");
+}
+function togglePick(id){
+  if(bought[id]||isCovered(id))return;
+  if(picks.has(id))picks.delete(id);
+  else{const g=ITEMS[id].group;if(g)GROUPS[g].forEach(o=>picks.delete(o));picks.add(id)}
+  paint();
+}
+$("#clearPicks").onclick=()=>{picks.clear();paint()};
+$("#hideBought").onchange=e=>{document.body.classList.toggle("hide-bought",e.target.checked);try{localStorage.setItem("xmas-hide",e.target.checked?"1":"0")}catch(x){}};
+
+// ---------- sheet ----------
+function openSheet(){$("#scrim").hidden=false;$("#sheet").hidden=false}
+function closeSheet(){$("#scrim").hidden=true;$("#sheet").hidden=true}
+$("#scrim").onclick=closeSheet;
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSheet()});
+$("#review").onclick=()=>reviewSheet();
+
+function reviewSheet(){
+  const s=$("#sheet");s.innerHTML="";
+  s.append(el("h3",null,"You're getting…"));
+  s.append(el("p",null,"These will be crossed off for everyone so nobody doubles up. Then you'll get your list with links to copy, save or email."));
+  const ol=el("ol");
+  [...picks].forEach(id=>{const it=ITEMS[id];const li=el("li");li.append(document.createTextNode(it.name+" "));
+    li.append(el("small",null,"for "+(it.for||it.person)+(it.price?" · "+it.price:"")));
+    const rm=el("button","rm","remove");rm.onclick=()=>{picks.delete(id);paint();picks.size?reviewSheet():closeSheet()};li.append(rm);ol.append(li)});
+  s.append(ol);
+  const row=el("div","row");
+  const cancel=el("button","btn line","Keep browsing");cancel.onclick=closeSheet;
+  const go=el("button","btn primary","Cross these off");
+  const msg=el("div","msg");
+  if(!API){go.disabled=true;msg.className="msg err";msg.textContent="Crossing off isn't switched on yet. You can still keep your list, then text Valerie what you're getting.";
+    const keep=el("button","btn line","Just give me my list");keep.onclick=()=>doneSheet([...picks],false);row.append(cancel,keep)}
+  else row.append(cancel,go);
+  go.onclick=async()=>{
+    go.disabled=true;go.textContent="Crossing off…";msg.textContent="";
+    const ids=[...picks];let ok=null;
+    try{await api({action:"buy",ids});ok=ids}catch(e){}
+    if(ok){picks.clear();paint();doneSheet(ok,true)}
+    else{paint();go.disabled=false;go.textContent="Try again";msg.className="msg err";
+      msg.textContent="Couldn't reach the list just now. Check your connection and try again."}
+  };
+  s.append(row,msg);openSheet();
+}
+function listText(ids){
+  const lines=["My Christmas gifts for the family","",];
+  const by={};ids.forEach(id=>{const it=ITEMS[id];const k=it.for||it.person;(by[k]=by[k]||[]).push(it)});
+  for(const k in by){lines.push(k.toUpperCase());by[k].forEach(it=>{
+    lines.push("• "+it.name+(it.note?" ("+it.note+")":"")+(it.price?" — "+it.price:""));if(it.url)lines.push("  "+it.url)});lines.push("")}
+  const {t}=totals(ids);if(t)lines.push("Estimated total: about "+money(t));
+  return lines.join("\n");
+}
+async function doneSheet(ids,marked){
+  const s=$("#sheet");s.innerHTML="";
+  s.append(el("div","done-mark",marked?"All crossed off. Thank you!":"Here's your list"));
+  s.append(el("h3",null,"Your shopping list"));
+  s.append(el("p",null,"Keep this so you have the links when you shop."));
+  const text=listText(ids);const ta=el("textarea","copy");ta.value=text;ta.readOnly=true;s.append(ta);
+  const row=el("div","row");const msg=el("div","msg");
+  const copy=el("button","btn primary","Copy list");
+  copy.onclick=()=>{navigator.clipboard.writeText(text).then(()=>{msg.className="msg";msg.textContent="Copied. Paste it into an email or a note."},()=>{ta.focus();ta.select();msg.className="msg";msg.textContent="Selected. Press Copy on your keyboard or phone."})};
+  row.append(copy);
+  const sv=el("a","btn line","Save as a file");sv.style.textAlign="center";sv.style.textDecoration="none";
+  sv.download="christmas-gifts-2026.txt";sv.href=URL.createObjectURL(new Blob([text],{type:"text/plain"}));row.append(sv);
+  const addr="";
+  const mail=el("a","btn line","Email it to me");mail.style.textAlign="center";mail.style.textDecoration="none";
+  mail.href="mailto:"+encodeURIComponent(addr)+"?subject="+encodeURIComponent("My Christmas gift list")+"&body="+encodeURIComponent(text);
+  row.append(mail);
+  const close=el("button","btn line","Done");close.onclick=closeSheet;row.append(close);
+  s.append(row,msg);
+  s.append(el("p",null,"“Email it to me” opens your email app with the list filled in; if nothing opens, use Copy instead."));
+  openSheet();
+}
+function unbuy(id,btn){
+  if(!btn.classList.contains("confirm")){btn.classList.add("confirm");btn.textContent="Tap again to un-cross";setTimeout(()=>{btn.classList.remove("confirm");btn.textContent="Undo"},4000);return}
+  if(!API)return;
+  btn.disabled=true;
+  api({action:"unbuy",ids:[id]}).then(paint).catch(()=>{btn.disabled=false;paint()});
+}
+
+render();
+
+// ---------- shared state ----------
+(async()=>{
+  const status=$("#status");
+  if(!API){status.className="status warn";status.textContent="Crossing off isn't switched on yet.";return}
+  let first=true;
+  async function load(){
+    try{await api();paint();const n=Object.keys(bought).length;status.className="status";
+      status.textContent=n?n+" gift"+(n===1?" is":"s are")+" already taken care of.":"Nothing's been bought yet. You're first!"}
+    catch(e){status.className="status warn";status.textContent=first?"Couldn't load what's been bought. Refresh to try again.":"Couldn't refresh; crossed-off items may be out of date."}
+    first=false;
+  }
+  await load();
+  setInterval(()=>{if(!document.hidden)load()},30000);
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden)load()});
+})();
+</script>
+</body>
+</html>
